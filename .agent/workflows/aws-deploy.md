@@ -131,6 +131,15 @@ docker run -d \
   --env-file .env \
   -p {호스트포트}:{컨테이너포트} \
   {ECR주소}/{앱이름}:{버전태그}
+
+# 추가: Celery 워커 컨테이너 중단 & 새 버전 실행
+docker stop {컨테이너명}-celery-worker || true
+docker rm {컨테이너명}-celery-worker || true
+docker run -d \
+  --name {컨테이너명}-celery-worker \
+  --env-file .env \
+  {ECR주소}/{앱이름}:{버전태그} \
+  celery -A config worker -l info
 ```
 
 ---
